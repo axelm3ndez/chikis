@@ -1,1 +1,0 @@
-// TODO: implementar create-payment.js
