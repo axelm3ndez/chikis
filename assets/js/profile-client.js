@@ -1,0 +1,7 @@
+// profile-client.js - simplified
+const token = AUTH.getToken();
+if(!token) { location.href='login.html'; }
+async function loadProfile(){ const res = await fetch('/.netlify/functions/get-profile', { headers: { Authorization: 'Bearer '+token } }); const j = await res.json(); if(j.error){ alert(j.error||'No autorizado'); AUTH.logout(); return; } document.querySelector('[name=name]').value=j.name||''; document.querySelector('[name=phone]').value=j.phone||''; document.querySelector('[name=city]').value=j.city||''; document.querySelector('[name=description]').value=j.description||''; }
+document.getElementById('profileForm')?.addEventListener('submit', async (e)=>{ e.preventDefault(); const f=new FormData(e.target); const body={ name:f.get('name'), phone:f.get('phone'), city:f.get('city'), description:f.get('description') }; const res = await fetch('/.netlify/functions/update-profile', { method:'POST', headers:{ 'Content-Type':'application/json', Authorization:'Bearer '+token }, body: JSON.stringify(body) }); const j = await res.json(); if(j.ok){ alert('Guardado'); loadProfile(); } else alert(j.error||'Error'); });
+document.getElementById('payBtn')?.addEventListener('click', async ()=>{ const res = await fetch('/.netlify/functions/create-payment', { method:'POST', headers:{ 'Content-Type':'application/json', Authorization:'Bearer '+token }, body: JSON.stringify({ amount:3000, description:'Membresía Destacado' }) }); const j = await res.json(); if(j.init_point) window.location.href=j.init_point; else alert(j.error||'Error'); });
+loadProfile();
