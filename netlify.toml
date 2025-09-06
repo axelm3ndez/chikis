@@ -1,1 +1,11 @@
-[build]\n  publish = "."\n  command = ""\n\n[[redirects]]\n  from = "/*"\n  to = "/index.html"\n  status = 200\n
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+  environment = [
+    "DATABASE_URL",
+    "JWT_SECRET",
+    "MP_ACCESS_TOKEN",
+    "MP_BACK_URL_SUCCESS",
+    "MP_BACK_URL_FAILURE"
+  ]
